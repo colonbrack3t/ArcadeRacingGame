@@ -5,6 +5,10 @@
 <img hidden src = "turningleft2.png" id="left2">
 <img hidden src = "turnright.png" id="right1">
 <img hidden src = "turnright2.png" id="right2">
+<<<<<<< HEAD
+=======
+<div id = "gauge"></div>
+>>>>>>> tracklines
 <script type="text/javascript">
   var canv = document.getElementById('canvas')
   var screen_height = canv.height
@@ -15,6 +19,10 @@
   document.getElementById("left1"),document.getElementById("left2"),
   document.getElementById("right1"),document.getElementById("right2"),
 ]
+<<<<<<< HEAD
+=======
+  var gauge = document.getElementById("gauge")
+>>>>>>> tracklines
   var carwidth = 128
   var carheight = carwidth/2
   var keydown = "none"
@@ -24,18 +32,32 @@
   var carspeed = 0
   var playercurvature=0
   var trackcurvature=0
+<<<<<<< HEAD
   var maxspeed = 100
   var clipmax = 70
+=======
+  var maxspeed = 150
+  var clipmax = 80
+>>>>>>> tracklines
   var currmax = maxspeed
   var totalTime = 0
   var imgnumber = 0
   var imageindex = 0
   var wheellength = 5
+<<<<<<< HEAD
   ctx.clearRect(0, 0, screen_width, screen_height);
 
   let fps = 30
   let loop
   
+=======
+  var acceleratingx = 0
+  ctx.clearRect(0, 0, screen_width, screen_height);
+  var trackdist = 0
+  let fps = 30
+  let loop
+  var trackSection = 0
+>>>>>>> tracklines
   function DrawPixel(x, y, color) {
     ctx.fillStyle= color
     ctx.fillRect(x, y, x + 1, y + 1)
@@ -47,8 +69,14 @@ window.onkeydown = function(e) { pressedKeys[e.keyCode] = true; }
 
 
 var track = [ //length , curve
+<<<<<<< HEAD
   [10 , 0],
   [200 , 0],
+=======
+
+
+  [60 , 0],
+>>>>>>> tracklines
   [200 , 0.50],
   [200 , 0.0],
   [50 , -3],
@@ -99,10 +127,22 @@ window.onload = function (){
 
     //up
     if (pressedKeys[38]){
+<<<<<<< HEAD
 
       carspeed += 2 * elapsedTime
     }
     else{
+=======
+      acceleratingx += elapsedTime
+      carspeed = (2-(1/(
+        Math.pow((0.08 * acceleratingx) + 0.7,2)
+      )))
+    }
+    else{
+      acceleratingx -=  5 * elapsedTime
+      if (acceleratingx < 0)
+        acceleratingx = 0
+>>>>>>> tracklines
       carspeed -= 1* elapsedTime
     }
     if (carspeed > 1)
@@ -112,15 +152,29 @@ window.onload = function (){
     distance_this_frame = (currmax * carspeed) * elapsedTime
     distance += distance_this_frame
     wheellength-=distance_this_frame
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> tracklines
     if (wheellength < 0)
     {
       wheellength = 5
       imgnumber = imgnumber == 1 ? 0 : 1
     } 
+<<<<<<< HEAD
    if (distance>=tracklength)
    distance-=tracklength
     var trackOffset = 0
     var trackSection =0
+=======
+   gauge.innerHTML = distance_this_frame/elapsedTime
+   
+    if (distance>=tracklength)
+   distance-=tracklength
+   var trackOffset = 0
+   trackSection =0
+>>>>>>> tracklines
     
     while(trackSection<track.length && trackOffset<=distance)
       {
@@ -128,14 +182,31 @@ window.onload = function (){
         trackSection++
         
       }
+<<<<<<< HEAD
     
+=======
+    console.log("tracksection " + (trackSection-1))
+    console.log("distance " + distance)
+    console.log("tracklength " + track[trackSection-1][0])
+     
+    trackOffset-=track[trackSection-1][0]
+>>>>>>> tracklines
     targetCurve = track[trackSection-1][1]
     trackcurvediff = (targetCurve-curvature)*elapsedTime*carspeed
     curvature+=trackcurvediff
     trackcurvature += curvature * elapsedTime * carspeed 
+<<<<<<< HEAD
     DrawScreen()
 
 
+=======
+    trackdist = distance - trackOffset
+    console.log("track diff " + trackdist)
+    DrawScreen()
+
+    let perc = (trackdist/track[trackSection-1][0])
+        console.log("percent complete " + perc)
+>>>>>>> tracklines
   }, 1000/fps)
 }
   function DrawScreen() {
@@ -178,14 +249,31 @@ window.onload = function (){
 
       var grasscolour = Math.sin(20 * Math.pow(1 - perspective,3) + distance*0.1) > 0 ? 'limegreen' : 'lime'
       var clipcolour = Math.sin(80 * Math.pow(1 - perspective,2) + distance) > 0 ? 'red' : 'white'
+<<<<<<< HEAD
 
+=======
+      var trackcolor = 'grey'
+      if (trackSection == 0){}
+      if (trackSection == track.length){
+        let perc = (trackdist/track[trackSection-1][0])
+        let line = Math.round(horizon * (Math.pow(perc,2)))
+        if (y > line-5 && y< line){
+         trackcolor =  Math.sin(0.8 * Math.pow(1 - perc,2) + x) > 0 ? (y % 2 ? 'black' : 'white') : (y % 2 ? 'white': 'black' )
+        }
+      }
+      
+>>>>>>> tracklines
       if (x >= 0 && x < leftGrasswidth)
         DrawPixel(x, row,grasscolour)
       if (x >= leftGrasswidth && x < leftClipwidth)
         DrawPixel(x, row, clipcolour)
 
       if (x >= leftClipwidth && x < rightClipwidth)
+<<<<<<< HEAD
         DrawPixel(x, row, "grey")
+=======
+        DrawPixel(x, row, trackcolor)
+>>>>>>> tracklines
 
       if (x >= rightClipwidth && x < rightGrasswidth)
         DrawPixel(x, row, clipcolour)
